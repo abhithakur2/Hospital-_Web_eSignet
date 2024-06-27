@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  oidc:
+    build: 
+      context: ./oidc
+      dockerfile: Dockerfile
+    image: oidc:latest
+    restart: always
+    ports:
+      - "3000:3000"
+
+  relyparty_api:
+    build: 
+      context: ./relyparty
+      dockerfile: Dockerfile
+    image: relyparty_api:latest
+    restart: always
+    ports:
+      - "8888:8888"
+
+  relyparty_ui:
+    build: 
+      context: ./relyparty_ui
+      dockerfile: Dockerfile
+    image: relyparty_ui:latest
+    restart: always
+    ports:
+      - "5000:5000"

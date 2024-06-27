@@ -1,0 +1,22 @@
+window._env_ = {
+  ESIGNET_UI_BASE_URL: "http://20.19.6.15/ui",
+  MOCK_RELYING_PARTY_SERVER_URL: "http://20.19.6.15/mock-relying-party-server",
+  REDIRECT_URI_USER_PROFILE: "http://20.19.6.15/userprofile",
+  REDIRECT_URI_REGISTRATION: "http://20.19.6.15/registration",
+  REDIRECT_URI: "http://20.19.6.15/userprofile",
+  CLIENT_ID: "DPG",
+  ACRS: "mosip:idp:acr:generated-code%20mosip:idp:acr:biometrics%20mosip:idp:acr:static-code",
+  SCOPE_USER_PROFILE: "openid%20profile",
+  SCOPE_REGISTRATION: "openid%20profile",
+  CLAIMS_USER_PROFILE: "%7B%22userinfo%22:%7B%22given_name%22:%7B%22essential%22:true%7D,%22phone_number%22:%7B%22essential%22:false%7D,%22email%22:%7B%22essential%22:true%7D,%22picture%22:%7B%22essential%22:false%7D,%22gender%22:%7B%22essential%22:false%7D,%22birthdate%22:%7B%22essential%22:false%7D,%22address%22:%7B%22essential%22:false%7D%7D,%22id_token%22:%7B%7D%7D",
+  CLAIMS_REGISTRATION: "%7B%22userinfo%22:%7B%22given_name%22:%7B%22essential%22:true%7D,%22phone_number%22:%7B%22essential%22:false%7D,%22email%22:%7B%22essential%22:true%7D,%22picture%22:%7B%22essential%22:false%7D,%22gender%22:%7B%22essential%22:false%7D,%22birthdate%22:%7B%22essential%22:false%7D,%22address%22:%7B%22essential%22:false%7D%7D,%22id_token%22:%7B%7D%7D",
+  SIGN_IN_BUTTON_PLUGIN_URL: "http://127.0.0.1:5500/sign-in-with-esignet/dist/iife/index.js",
+  display: "popup",
+  prompt: "login",
+  acrValues: "mosip:idp:acr:generated-code mosip:idp:acr:linked-wallet mosip:idp:acr:biometrics",
+  GRANT_TYPE: "authorization_code",
+  MAX_AGE: 21,
+  CLAIMS_LOCALES: "en",
+  codeChallenge: "vycv4CxaC8PmZfZ4vGYlg45lw8-psTaq13s42q4vh1k",
+  codeChallengeMethod: "S256"
+};

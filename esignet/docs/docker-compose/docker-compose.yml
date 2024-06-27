@@ -1,0 +1,121 @@
+version: '3.8'
+
+services:
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 5455:5432
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
+
+  artifactory-server:
+    image: 'anushas/artifactory-server:local'
+    ports:
+      - 8080:8080
+      - 8083:80
+    restart: always
+  mock-identity-system:
+    image: 'mosipid/mock-identity-system:0.9.1'
+    user: root
+    ports:
+      - 8082:8082
+    restart: always
+    environment:
+      - artifactory_url_env=http://artifactory-server:8080/
+      - container_user=mosip
+      - active_profile_env=default
+      - SPRING_CONFIG_NAME=mock-identity-system
+      - SPRING_CONFIG_LOCATION=/home/mosip/mock-identity-system-default.properties
+    depends_on:
+      - database
+      - artifactory-server
+    volumes:
+      - ./config/mock-identity-system-default.properties:/home/mosip/mock-identity-system-default.properties
+
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    restart: always
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    restart: always
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "esignet-linked:1:1,esignet-consented:1:1"
+
+  esignet:
+    image: 'mosipdev/esignet:develop'
+    user: root
+    ports:
+      - 8088:8088
+    restart: always
+    environment:
+      - artifactory_url_env=http://artifactory-server:8080/
+      - container_user=mosip
+      - active_profile_env=default
+      - SPRING_CONFIG_NAME=esignet
+      - SPRING_CONFIG_LOCATION=/home/mosip/esignet-default.properties
+    depends_on:
+      - database
+      - artifactory-server
+      - kafka
+    volumes:
+      - ./config/esignet-default.properties:/home/mosip/esignet-default.properties
+      - ./loader_path/:/home/mosip/additional_jars/
+      - ./key/:/home/mosip/certs/
+
+#  esignet-ui:
+#    image: 'mosipdev/oidc-ui:develop'
+#    user: root
+#    ports:
+#      - 3000:3000
+#    depends_on:
+#      - esignet
+#      - artifactory-server
+#    environment:
+#      - artifactory_url_env=http://artifactory-server:8080
+#      - container_user=mosip
+#      - SIGN_IN_WITH_ESIGNET_PLUGIN_URL=http://artifactory-server:8080/artifactory/libs-release-local/mosip-plugins/sign-in-with-esignet.zip
+#      - OIDC_UI_PUBLIC_URL='oidc-ui'
+#      - esignet_url_env=http://esignet:8088
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/nginx.conf
+##DGP_API_service
+#  dgp-api:
+#    image: 'dgp_api:latest'
+#    user: root
+#    depends_on:
+#      - esignet
+#    ports:
+#      - 8888:8888
+   # environment:
+   #   - container_user=mosip
+   #   - REACT_APP_ESIGNET_API_URL=http://esignet:8088
+##DGP_UI_service 
+#  dgp-ui:   image: 'dgp_ui:01'
+#    user: root
+#    depends_on:
+#      - dpg-api
+#      - esignet
+#    ports:
+#      - 3000:3000
+   # environment:
+   #   - container_user=mosip
+   #   - REACT_APP_MOCK_RELYING_PARTY_SERVER_URL=http://dgp-api:8888
+   #   - REACT_APP_ESIGNET_API_URL=http://esignet:8088
+
