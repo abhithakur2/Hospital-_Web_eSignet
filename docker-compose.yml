@@ -3,7 +3,7 @@ version: '3'
 services:
   oidc:
     build: 
-      context: ./oidc
+      context: ./oidc-ui
       dockerfile: Dockerfile
     image: oidc:latest
     restart: always
@@ -12,7 +12,7 @@ services:
 
   relyparty_api:
     build: 
-      context: ./relyparty
+      context: ./partyservice
       dockerfile: Dockerfile
     image: relyparty_api:latest
     restart: always
@@ -21,7 +21,7 @@ services:
 
   relyparty_ui:
     build: 
-      context: ./relyparty_ui
+      context: ./relyingPatryUI
       dockerfile: Dockerfile
     image: relyparty_ui:latest
     restart: always
