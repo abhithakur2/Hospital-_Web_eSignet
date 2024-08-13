@@ -1,6 +1,6 @@
 {
   "name": "mosip-esignet",
- "homepage": "http://20.98.161.315/ui",
+ "homepage": "http://localhost/ui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
